@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.memo-pipe.watcher</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>-m</string>
+        <string>memo_pipe.watcher</string>
+    </array>
+
+    <!-- Set by scripts/install.sh to the repo checkout so `python3 -m memo_pipe.watcher` resolves. -->
+    <key>WorkingDirectory</key>
+    <string>__MEMO_PIPE_DIR__</string>
+
+    <!-- Fire on changes to the Voice Memos iCloud recordings folder... -->
+    <key>WatchPaths</key>
+    <array>
+        <string>__HOME__/Library/Group Containers/group.com.apple.VoiceMemos.shared/Recordings</string>
+    </array>
+
+    <!-- ...plus a 5-minute polling fallback (iCloud sync timing is not instant). -->
+    <key>StartInterval</key>
+    <integer>300</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/.memo-pipe/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/.memo-pipe/launchd.err.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>
