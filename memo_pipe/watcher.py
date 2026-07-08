@@ -113,19 +113,18 @@ def main() -> int:
     setup_logging(cfg)
 
     lock_path = cfg.state_dir / "watcher.lock"
-    lock_file = open(lock_path, "w")
-    try:
-        fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError:
-        log.info("another run is in progress; exiting")
-        return 0
+    with open(lock_path, "w") as lock_file:
+        try:
+            fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            log.info("another run is in progress; exiting")
+            return 0
 
-    ledger = Ledger(cfg.ledger_path)
-    try:
-        scan(cfg, ledger)
-    finally:
-        ledger.close()
-        lock_file.close()
+        ledger = Ledger(cfg.ledger_path)
+        try:
+            scan(cfg, ledger)
+        finally:
+            ledger.close()
     return 0
 
 
